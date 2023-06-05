@@ -31,8 +31,18 @@
     <div class="social">
         <ul>
             <li class="facebook">
-                <a href="{% url "social:begin" "facebook" %}">
-                    Авторизоваться с помощью Фэйсбука
+                <a href="{% url "social:begin" "feacbook" %}">
+                    Авторизоваться с помощью feacbook
+                </a>
+            </li>
+            <li class="twitter">
+                <a href="{% url "social:begin" "twitter" %}">
+                    Авторизоваться с помощью Twitter
+                </a>
+            </li>
+            <li class="google">
+                <a href="{% url "social:begin" "google-oauth2" %}">
+                    Авторизоваться с помощью Google
                 </a>
             </li>
         </ul>
