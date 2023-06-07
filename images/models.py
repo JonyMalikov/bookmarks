@@ -19,6 +19,9 @@ class Image(models.Model):
                                         related_name='images_liked',
                                         blank=True)
 
+    def get_absolute_url(self):
+        return reverse('images:detail', args=[self.id, self.slug])
+
     class Meta:
         indexes = [
             models.Index(fields=['-created']),
