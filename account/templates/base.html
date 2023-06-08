@@ -1,5 +1,7 @@
 {% load static %}
+
 <!DOCTYPE html>
+
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
@@ -14,7 +16,7 @@
         <a href="{% url "dashboard" %}">Моя информационная панель</a>
       </li>
       <li {% if section == "images" %}class="selected"{% endif %}>
-        <a href="#">Изображение</a>
+        <a href="{% url "images:list" %}">Изображение</a>
       </li>
       <li {% if section == "people" %}class="selected"{% endif %}>
         <a href="#">Люди</a>
