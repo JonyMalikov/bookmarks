@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile, Contact
+from actions.utils import create_action
 
 
 @login_required
@@ -42,6 +43,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
             Profile.objects.create(user=new_user)
+            create_action(new_user, 'создал учетную запись')
             return render(request,
                           'account/register_done.html', {'new_user': new_user})
     else:
@@ -108,6 +110,7 @@ def user_follow(request):
                 Contact.objects.get_or_create(
                     user_from=request.user,
                     user_to=user)
+                create_action(request.user, 'является следующее', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()
