@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from actions.models import Action
 from actions.utils import create_action
+
 from .forms import ProfileEditForm, UserEditForm, UserRegistrationForm
 from .models import Contact, Profile
 
@@ -18,12 +19,8 @@ def dashboard(request):
     following_ids = request.user.following.values_list("id", flat=True)
     if following_ids:
         actions = actions.filter(user_id__in=following_ids)
-    actions = actions.select_related("user", "user__profile")[:10].prefetch_related(
-        "target"
-    )[:10]
-    return render(
-        request, "account/dashboard.html", {"section": "dashboard", "actions": actions}
-    )
+    actions = actions.select_related("user", "user__profile")[:10].prefetch_related("target")[:10]
+    return render(request, "account/dashboard.html", {"section": "dashboard", "actions": actions})
 
 
 def register(request):
@@ -47,9 +44,7 @@ def edit(request):
     """Представление редактирования личной информации пользователя."""
     if request.method == "POST":
         user_form = UserEditForm(instance=request.user, data=request.POST)
-        profile_form = ProfileEditForm(
-            instance=request.user.profile, data=request.POST, files=request.FILES
-        )
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -70,18 +65,14 @@ def edit(request):
 def user_list(request):
     """Представление списка информации для объектов User."""
     users = User.objects.filter(is_active=True)
-    return render(
-        request, "account/user/list.html", {"section": "people", "users": users}
-    )
+    return render(request, "account/user/list.html", {"section": "people", "users": users})
 
 
 @login_required
 def user_detail(request, username):
     """Представление детальной информации для объектов User."""
     user = get_object_or_404(User, username=username, is_active=True)
-    return render(
-        request, "account/user/detail.html", {"section": "people", "user": user}
-    )
+    return render(request, "account/user/detail.html", {"section": "people", "user": user})
 
 
 @require_POST
